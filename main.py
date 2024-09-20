@@ -4,7 +4,8 @@ from selenium.webdriver.common.by import By
 import time
 s = Service("chromedriver.exe")
 
-driver = webdriver.Chrome(service=s)
+# driver = webdriver.Chrome(service=s)
+driver = webdriver.Chrome()
 
 url = "https://leetcode.com/problemset/all/?page="
 
@@ -13,7 +14,7 @@ solution = "/solution"
 daily_question = "?envType=daily-question&envId="
 weekely_question = "?envType=weekly-question&envId"
 
-cnt = 0;
+cnt = 0
 
 links = []
 
