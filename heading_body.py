@@ -2,12 +2,15 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import shutil
 import time
 
-# s = Service('./chromedriver-win64/chromedriver.exe')
+s = Service('chromedriver.exe')
 
-# driver = webdriver.Chrome(service=s)
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(service=s)
+# driver = webdriver.Chrome()
 
 links = []
 
@@ -16,58 +19,84 @@ body_class = 'elfjS'
 
 Problem_data_folder = 'PROBLEM_DATA'
 
-def add_heading_to_file(text) :
-    if not os.path.exists(Problem_data_folder) :
-        os.mkdir(Problem_data_folder)
+def add_link_to_file(text) :
+    problems_file = 'problems.txt'
 
-    file_path = os.path.join(Problem_data_folder, 'heading.txt')
+    with open(problems_file, 'a', encoding='utf-8') as file :
+        file.write(text)
+
+def add_heading_to_file(text) :
+
+    head_file = 'heading.txt'
 
     # write in heading.txt file
-    heading_file = open(file_path, 'w')
-
-    heading_file.write(text + '\n')
+    with open(head_file, 'a', encoding='utf-8') as file :
+        file.write(text + '\n')
 
 def add_body_to_file(text, index) :
     index_folder_path = os.path.join(Problem_data_folder, str(index))
+
+    # to create one directory, mkdir and to create full path, makedirs
     if not os.path.exists(index_folder_path) :
-        os.mkdir(index_folder_path)
+        os.makedirs(index_folder_path)
 
-    file_path = os.path.join(index_folder_path, 'problem.txt')
+    body_file = os.path.join(index_folder_path, 'body.txt')
 
-    problem_file = open(file_path, 'w')
-    problem_file.write(text)
-    
+    with open(body_file, 'w', encoding='utf-8') as file :
+        file.write(text)
 
 def explore_problem(url, index) :
     driver.get(url)
-    time.sleep(5)
+    
+    wait = WebDriverWait(driver, 10)
 
-    # find the heading and body by id 
-    heading = driver.find_element(By.CLASS_NAME, heading_class)
-    body = driver.find_element(By.CLASS_NAME, body_class)
+    try :
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, heading_class)))
 
-    #  add heading in file 
-    add_heading_to_file(heading.text)
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, body_class)))
 
-    # add body in PROBLEM_DATA/INDEX/problem.txt
-    add_body_to_file(body.text, index)
+        # find the heading and body by id 
+        heading = driver.find_element(By.CLASS_NAME, heading_class)
+        body = driver.find_element(By.CLASS_NAME, body_class)
+
+        #  add heading in file 
+        add_heading_to_file(heading.text)
+
+        # add body in PROBLEM_DATA/INDEX/problem.txt
+        add_body_to_file(body.text, index)
+
+        # add link in problems.txt
+        add_link_to_file(url)
+
+        return True
+    
+    except :
+        print("heading and body can not scrapped : ", url)
+        return False
+
+def clean_data() :
+    try :
+        # remove heading.txt file 
+        if os.path.exists('heading.txt') :
+            os.remove('heading.txt')
+
+        # remove problems.txt
+        if os.path.exists('problems.txt') :
+            os.remove('problems.txt')
+
+        # remove data folder for body
+        if os.path.exists(Problem_data_folder) :
+            shutil.rmtree(Problem_data_folder)
+    
+    except :
+        pass
 
 
-
-def get_links_from_file() :
-    problem_file = open('leetcode.txt', 'r')
-
-    for link in problem_file :
-        links.append(link)
-
-
-
-# read all links from file 
-
-get_links_from_file()
+# clean everything for fresh scrapping 
+clean_data()
 
 # iterate for each problem
-index  = 1
-for link in links :
-    explore_problem(link, index)
-    index += 1
+index = 1
+with open('leetcode.txt', 'r') as file :
+    for link in file :
+        index += explore_problem(link, index)
