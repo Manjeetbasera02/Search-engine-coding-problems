@@ -22,7 +22,7 @@ def get_links_elements(url) :
     global cnt
     driver.get(url)
 
-    time.sleep(5)
+    time.sleep(7)
     # instead of time.sleep, can use webdriverwait
 
     links_elements = driver.find_elements(By.TAG_NAME, 'a')
@@ -48,7 +48,7 @@ def get_links_file() :
 
 # iteration for 50 pages 
 
-for page_num in range(1,2) :
+for page_num in range(1,51) :
     get_links_elements(url + str(page_num))
 
 # write all links in file 
