@@ -24,7 +24,7 @@ def home():
     if form.validate_on_submit():  # Validate the form when submitted
         query = form.search.data
         q_terms = [term.lower() for term in query.strip().split()]
-        results = get_sorted_order_documents(q_terms)
+        results = get_sorted_order_documents(q_terms)[:20]
         return render_template('index.html', form=form, results=results)
 
     return render_template('index.html', form=form, results=None)
