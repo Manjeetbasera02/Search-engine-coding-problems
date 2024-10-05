@@ -80,7 +80,6 @@ def calculate_idf_value(term) :
 
 # function to get sorted order of documents for query 
 def get_sorted_order_documents(query_terms) :
-    return ["problem 1", "problem 2"]
     global documents
     documents = fetch_documents()
 
@@ -92,6 +91,8 @@ def get_sorted_order_documents(query_terms) :
 
     global document_links
     document_links = fetch_document_links()
+
+    return ["problem 1", "problem 2"]
     # {document, value}
     total_tf_idf = {}
 
