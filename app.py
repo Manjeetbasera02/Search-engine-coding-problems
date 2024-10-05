@@ -8,7 +8,7 @@ import math
 # fetch documents
 def fetch_documents() : 
     documents = []
-    with open('preprocessing/documents.txt', 'r') as d_file :
+    with open('preprocessing/documents.txt', 'r', encoding='utf-8', errors='replace') as d_file :
         for document in d_file :
             documents.append(document.strip().split())
 
