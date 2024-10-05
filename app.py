@@ -28,6 +28,3 @@ def home():
         return render_template('index.html', form=form, results=results)
 
     return render_template('index.html', form=form, results=None)
-
-if __name__ == '__main__':
-    app.run()
