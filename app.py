@@ -13,6 +13,7 @@ class SearchForm(FlaskForm):
 # Route for testing
 @app.route('/<query>')
 def return_links(query):
+    return ["hello world1", "hello world2"]
     q_terms = [term.lower() for term in query.strip().split()]
     return jsonify(get_sorted_order_documents(q_terms))
 
