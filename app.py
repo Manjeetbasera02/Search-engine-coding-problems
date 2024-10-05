@@ -83,6 +83,8 @@ def get_sorted_order_documents(query_terms) :
     global documents
     documents = fetch_documents()
 
+    return ["problem 1", "problem 2"]
+
     global vocab_idf
     vocab_idf = fetch_vocb_idf()
 
@@ -92,7 +94,6 @@ def get_sorted_order_documents(query_terms) :
     global document_links
     document_links = fetch_document_links()
 
-    return ["problem 1", "problem 2"]
     # {document, value}
     total_tf_idf = {}
 
