@@ -17,7 +17,7 @@ def fetch_documents() :
 # fetch vocab_idf 
 def fetch_vocb_idf() :
     vocab_idf = {}
-    with open('preprocessing/vocab.txt', 'r') as v_file, open('preprocessing/idf.txt', 'r') as idf_file :
+    with open('preprocessing/vocab.txt', 'r', encoding='utf-8', errors='replace') as v_file, open('preprocessing/idf.txt', 'r', encoding='utf-8', errors='replace') as idf_file :
         for vocab, idf in zip(v_file, idf_file) :
             vocab_idf[vocab.strip()] = int(idf.strip())
 
@@ -29,7 +29,7 @@ def fetch_term_index() :
 
     lines = []
     
-    with open('preprocessing/word_index.txt', 'r') as index_file :
+    with open('preprocessing/word_index.txt', 'r', encoding='utf-8', errors='replace') as index_file :
         lines = index_file.readlines()
 
     for index in range(0, len(lines), 2) :
@@ -41,7 +41,7 @@ def fetch_term_index() :
 def fetch_document_links() :
     links = []
     
-    with open('problems.txt', 'r') as pr_file :
+    with open('problems.txt', 'r', encoding='utf-8', errors='replace') as pr_file :
         for link in pr_file :
             links.append(link.strip())
 
@@ -82,8 +82,6 @@ def calculate_idf_value(term) :
 def get_sorted_order_documents(query_terms) :
     global documents
     documents = fetch_documents()
-
-    return ["problem 1", "problem 2"]
 
     global vocab_idf
     vocab_idf = fetch_vocb_idf()
