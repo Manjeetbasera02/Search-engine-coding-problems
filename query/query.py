@@ -32,11 +32,20 @@ def fetch_term_index() :
 
     return term_index
 
-print(fetch_term_index())
+# fetch document links
+def fetch_document_links() :
+    links = []
+    
+    with open('problems.txt', 'r') as pr_file :
+        for link in pr_file :
+            links.append(link.strip())
 
-documents = fetch_documents()
-vocab_idf = fetch_vocb_idf()
-term_index = fetch_term_index()
+    return links
+
+documents = []
+vocab_idf = {}
+term_index = {}
+document_links = []
 
 #  calculate tf_dictionary = {document, value} for a term
 def calculate_tf_dictionary(term) :
@@ -66,12 +75,28 @@ def calculate_idf_value(term) :
 
 # function to get sorted order of documents for query 
 def get_sorted_order_documents(query_terms) :
+    global documents
+    documents = fetch_documents()
+
+    global vocab_idf
+    vocab_idf = fetch_vocb_idf()
+
+    global term_index
+    term_index = fetch_term_index()
+
+    global document_links
+    document_links = fetch_document_links()
     # {document, value}
     total_tf_idf = {}
 
     # iterate for each term in query and caluclate total tf_idf value for each document 
 
     for term in query_terms :
+        # check , is term a part of vocab ?
+
+        if term not in vocab_idf :
+            continue
+
         tf_values = calculate_tf_dictionary(term)
         idf_value = calculate_idf_value(term)
 
@@ -86,18 +111,24 @@ def get_sorted_order_documents(query_terms) :
     # sort total_tf_idf in order of decreasing  values
     total_tf_idf = dict(sorted(total_tf_idf.items(), key=lambda item: item[1], reverse=True))
 
-    return total_tf_idf.keys()
+    # store links for documents in ans list 
+
+    ans = []
+
+    for document in total_tf_idf :
+        ans.append(document_links[int(document)])
+
+    return ans
 
 # # enter query 
-query = input('enter query string here: ')
+# query = input('enter query string here: ')
 
 # split query string and make lowercase
 # first strip on query, then split
-query_terms = [term.lower() for term in query.strip().split()]
+# query_terms = [term.lower() for term in query.strip().split()]
 
-sorted_documents = get_sorted_order_documents(query_terms)
+# sorted_documents_links = get_sorted_order_documents("maximum minimum")
 
-#  print sorted order of documents 
+# print(sorted_documents_links)
 
-for document in sorted_documents :
-    print(documents[int(document)])
+# print(sorted_documents_links)

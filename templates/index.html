@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+
+     
+</head>
+<body>
+    <h1>Search for Problems</h1>
+
+    <!-- Form for search -->
+    <form method="POST">
+        {{ form.hidden_tag() }}  <!-- CSRF protection -->
+        {{ form.search.label }}   <!-- Render the label for the input field -->
+        {{ form.search(size=32) }}  <!-- Render the input field -->
+        {{ form.submit() }}        <!-- Render the submit button -->
+    </form>
+
+    <!-- If there are results, display them -->
+    {% if results %}
+        <h2>Search Results:</h2>
+        <ul>
+        {% for result in results %}
+            <li>
+                <a href="{{ result }}" target="_blank">{{ result }}</a>
+                <!-- If result has a description or snippet -->
+                {% if result.description %}
+                    <p>{{ result.description }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</body>
+</html>
